@@ -46,17 +46,22 @@
 // ZAP: 2022/08/05 Address warns with Java 18 (Issue 7389).
 package org.parosproxy.paros.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.parosproxy.paros.Constant;
@@ -118,6 +123,8 @@ public class MainMenuBar extends JMenuBar {
         this.add(getMenuImport());
         this.add(getMenuOnline());
         this.add(getMenuHelp());
+        this.setOpaque(true);
+       
     }
 
     /**
@@ -126,11 +133,13 @@ public class MainMenuBar extends JMenuBar {
      * @return the Edit menu
      */
     public javax.swing.JMenu getMenuEdit() {
+    	MainMenuBar here= this;
         if (menuEdit == null) {
             menuEdit = new javax.swing.JMenu();
             menuEdit.setText(Constant.messages.getString("menu.edit")); // ZAP: i18n
             menuEdit.setMnemonic(Constant.messages.getChar("menu.edit.mnemonic"));
             menuEdit.add(getMenuEditZAPMode());
+        
             menuEdit.addSeparator();
         }
         return menuEdit;
@@ -227,6 +236,7 @@ public class MainMenuBar extends JMenuBar {
     }
 
     private ZapMenuItem getMenuToolsOptions() {
+    	JFrame here;
         if (menuToolsOptions == null) {
             menuToolsOptions =
                     new ZapMenuItem(

@@ -19,6 +19,7 @@
  */
 package org.zaproxy.zap.view;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,6 +75,9 @@ public class TabbedPanel2 extends TabbedPanel {
     public TabbedPanel2() {
         super();
 
+        this.setOpaque(true);
+  
+
         this.addChangeListener(
                 new ChangeListener() {
                     @Override
@@ -95,8 +99,16 @@ public class TabbedPanel2 extends TabbedPanel {
                         }
                     }
                 });
+        
     }
 
+    
+    public void changeStyle(Color color) {
+        this.setOpaque(true);
+        this.setBackground(color);    
+    }
+    
+    
     @Override
     public void updateUI() {
         super.updateUI();

@@ -41,6 +41,7 @@
 package org.parosproxy.paros.view;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -54,6 +55,8 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
@@ -95,12 +98,14 @@ public class MainFrame extends AbstractFrame {
     private JPanel paneContent = null;
     // ZAP: Removed instance variable (JLabel txtStatus). The status label that
     // was in the footer panel is no longer used.
-    private final WorkbenchPanel paneStandard;
+    private  final WorkbenchPanel paneStandard;
     private org.parosproxy.paros.view.MainMenuBar mainMenuBar = null;
     private JPanel paneDisplay = null;
 
     private MainToolbarPanel mainToolbarPanel = null;
     private MainFooterPanel mainFooterPanel = null;
+    private JMenuItem menuEditItem= null;
+
 
     /**
      * The {@code ZapToggleButton} that sets whether or not the tabs should show the panels' names.
@@ -225,6 +230,7 @@ public class MainFrame extends AbstractFrame {
             OptionsParam options, AbstractPanel requestPanel, AbstractPanel responsePanel) {
         super();
 
+ 
         if (options == null) {
             throw new IllegalArgumentException("Parameter options must not be null");
         }
@@ -235,10 +241,20 @@ public class MainFrame extends AbstractFrame {
             throw new IllegalArgumentException("Parameter responsePanel must not be null");
         }
 
+//        requestPanel.setOpaque(true);
+//        requestPanel.setForeground(new Color(24,134,56));
+//        responsePanel.setOpaque(true);
+//        responsePanel.setBackground(new Color(24,134,56));
+        
         this.options = options;
         paneStandard = new WorkbenchPanel(options.getViewParam(), requestPanel, responsePanel);
         paneStandard.setLayout(new CardLayout());
         paneStandard.setName("paneStandard");
+
+//        paneStandard.setOpaque(true);
+//        paneStandard.setBackground(Color.red);
+//        paneStandard.setForeground(Color.red);
+//        paneStandard.setBackground(new Color(24,134,56));
 
         initialize();
 
@@ -248,8 +264,9 @@ public class MainFrame extends AbstractFrame {
     /** This method initializes this */
     private void initialize() {
         this.setJMenuBar(getMainMenuBar());
+        this.setOpacity(1);
         this.setContentPane(getPaneContent());
-        this.setPreferredSize(new Dimension(1000, 800));
+        this.setPreferredSize(new Dimension(2500, 800));
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(
                 new WindowAdapter() {
@@ -272,12 +289,18 @@ public class MainFrame extends AbstractFrame {
 
             paneContent = new JPanel();
             paneContent.setLayout(new BoxLayout(getPaneContent(), BoxLayout.Y_AXIS));
+
+            paneContent.setOpaque(true);
+            paneContent.setBackground(Color.red);
+            paneContent.setForeground(Color.red);
             paneContent.setEnabled(true);
-
             paneContent.add(getMainToolbarPanel(), null);
-
+  
             paneContent.add(getPaneDisplay(), null);
             paneContent.add(getMainFooterPanel(), null);
+            
+            
+	            
         }
         return paneContent;
     }
@@ -300,7 +323,47 @@ public class MainFrame extends AbstractFrame {
     public org.parosproxy.paros.view.MainMenuBar getMainMenuBar() {
         if (mainMenuBar == null) {
             mainMenuBar = new org.parosproxy.paros.view.MainMenuBar();
+            mainMenuBar.setOpaque(true);
+            WorkbenchPanel tabbedPanel= this.paneStandard;
+            MainFrame mainFrame= this;
+            menuEditItem = new JMenu("Change Style");
+            mainMenuBar.getMenuEdit().add(menuEditItem);
+            JMenuItem menuEditItemPink = new JMenuItem("Pink");
+            JMenuItem menuEditItemBlue= new JMenuItem("Blue");
+            menuEditItem.add(menuEditItemPink);
+            menuEditItem.add(menuEditItemBlue);
+            menuEditItemPink.addActionListener(
+                    new java.awt.event.ActionListener() {
+                        @Override
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                        	mainMenuBar.setBackground(Color.pink);
+                        	tabbedPanel.getTabbedSelect().changeStyle(Color.pink);
+                        	tabbedPanel.getTabbedStatus().changeStyle(Color.pink);
+                        	tabbedPanel.getTabbedWork().changeStyle(Color.pink);
+                        	mainFrame.getMainToolbarPanel().setBackground(Color.pink);
+                        	mainFrame.getMainFooterPanel().setBackground(Color.pink);
+//                        	tabbedPanel.getResponseTabbed().toDarkMode();
+                        }
+                    });  
+   
+//        	tabbedPanel.getResponseTabbed().toDarkMode();
+
+            menuEditItemBlue.addActionListener(
+                    new java.awt.event.ActionListener() {
+                        @Override
+                        public void actionPerformed(java.awt.event.ActionEvent e) {
+                        	mainMenuBar.setBackground(new Color(75,201,190));
+                        	tabbedPanel.getTabbedSelect().changeStyle(new Color(75,201,190));
+                        	tabbedPanel.getTabbedStatus().changeStyle(new Color(75,201,190));
+                        	tabbedPanel.getTabbedWork().changeStyle(new Color(75,201,190));
+                        	mainFrame.getMainToolbarPanel().setBackground(new Color(75,201,190));
+                        	mainFrame.getMainFooterPanel().setBackground(new Color(75,201,190));
+//                        	tabbedPanel.getResponseTabbed().toDarkMode();
+                        }
+                    });   
         }
+     
+
         return mainMenuBar;
     }
 
@@ -319,7 +382,11 @@ public class MainFrame extends AbstractFrame {
             paneDisplay = new JPanel();
             paneDisplay.setLayout(new CardLayout());
             paneDisplay.setName("paneDisplay");
+//            paneDisplay.setBackground(new Color(24,134,56));
+
             paneDisplay.add(getWorkbench(), getWorkbench().getName());
+            paneDisplay.setOpaque(true);
+
         }
         return paneDisplay;
     }
@@ -356,6 +423,7 @@ public class MainFrame extends AbstractFrame {
             mainToolbarPanel.addButton(getAboveResponsePanelPositionButton());
             responsePanelPositionsButtonGroup.add(getAboveResponsePanelPositionButton());
             mainToolbarPanel.addSeparator();
+
         }
         return mainToolbarPanel;
     }
@@ -742,6 +810,7 @@ public class MainFrame extends AbstractFrame {
      * @see #setResponsePanelPosition(WorkbenchPanel.ResponsePanelPosition)
      */
     public WorkbenchPanel.ResponsePanelPosition getResponsePanelPosition() {
+   
         return responsePanelPosition;
     }
 

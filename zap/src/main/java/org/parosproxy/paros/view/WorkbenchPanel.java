@@ -43,6 +43,7 @@
 package org.parosproxy.paros.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -410,7 +411,9 @@ public class WorkbenchPanel extends JPanel {
         validateNotNull(viewOptions, "viewOptions");
         validateNotNull(requestPanel, "requestPanel");
         validateNotNull(responsePanel, "responsePanel");
-
+        this.setOpaque(true);
+        this.setBackground(Color.red);
+        this.setForeground(Color.red);
         this.requestPanel = requestPanel;
         this.responsePanel = responsePanel;
         this.componentMaximiser = new ComponentMaximiser(this);
@@ -421,6 +424,7 @@ public class WorkbenchPanel extends JPanel {
 
         responseTabbedPanel = new TabbedPanel2();
         responseTabbedPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+   
         responseTabbedPanel.addMouseListener(maximiseMouseListener);
 
         getTabbedWork().addMouseListener(maximiseMouseListener);
@@ -464,6 +468,9 @@ public class WorkbenchPanel extends JPanel {
         return layout;
     }
 
+    public TabbedPanel2 getResponseTabbed() {
+    	return this.responseTabbedPanel;
+    }
     /**
      * Sets the layout of the workbench panel.
      *
@@ -584,6 +591,7 @@ public class WorkbenchPanel extends JPanel {
         splitVert.setBottomComponent(getPaneStatus());
         splitVert.setContinuousLayout(false);
         splitVert.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+splitVert.getBottomComponent().setBackground(Color.red);
         return splitVert;
     }
 
@@ -1236,6 +1244,7 @@ public class WorkbenchPanel extends JPanel {
         splitPane.setContinuousLayout(false);
         splitPane.setDoubleBuffered(true);
         splitPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
         return splitPane;
     }
 
@@ -1250,6 +1259,8 @@ public class WorkbenchPanel extends JPanel {
                             WorkbenchPanel.class.getResource("/resource/icon/16/handshake.png")));
             splitRequestAndResponsePanel.setHideable(false);
 
+            splitRequestAndResponsePanel.setOpaque(true);
+            splitRequestAndResponsePanel.setBackground(Color.red);
             splitRequestAndResponse = createSplitPane(orientation);
             splitRequestAndResponsePanel.add(splitRequestAndResponse);
         }
@@ -1265,6 +1276,7 @@ public class WorkbenchPanel extends JPanel {
 
         if (selectedComponent == requestPanel || selectedComponent == responsePanel) {
             tabbedPanel.setSelectedComponent(splitRequestAndResponsePanel);
+
         }
     }
 
